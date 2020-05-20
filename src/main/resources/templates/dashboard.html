@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>TechService - Dashboard</title>
+    <style type ="text/css">
+        .selected {
+            background-color: lightgray;
+        }
+        table tbody tr:hover {
+            background-color: lightblue;
+        }
+        #bottomRow{
+            text-align: center;
+            align-content: center;
+        }
+
+        .table-sortable .th-sort-asc::after{
+            content: "\25b4";
+        }
+
+        .table-sortable .th-sort-desc::after{
+            content: "\25be";
+        }
+
+        .table-sortable .th-sort-asc::after,
+        .table-sortable .th-sort-desc::after {
+            margin-left: 5px;
+        }
+
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+            integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+
+        let closedChecked;
+        let myChecked;
+        let callRecordId;
+
+        $(function() {
+            $("#createAccount").click(function(){
+                window.location.href = "/register";
+            })
+        });
+
+        $(function () {
+            $("#newCall").click(function () {
+                window.location.href = "/newcall";
+            })
+        });
+
+        $(function () {
+            $("#updateCall").click(function () {
+                if(callRecordId != null){
+                    window.location.href = "/updatecall/" + callRecordId;
+                } else {
+                    alert("Please select a ticket!")
+                }
+            })
+        });
+
+        $(function () {
+            $("#deleteCall").click(function () {
+                if(callRecordId != null){
+                    window.location.href = "/dashboard/" + callRecordId;
+                } else {
+                    alert("Please select a ticket!")
+                }
+            })
+        });
+
+        $(function () {
+            $("#reports").click(function () {
+                window.location.href = "/reports";
+            })
+        });
+
+        $(function () {
+            $("#dashboardTable tbody tr").click(function () {
+                $(this).addClass("selected").siblings().removeClass("selected");
+                callRecordId = $(this).find('td:eq(0)').text();
+            })
+        });
+
+        $(function () {
+            $('#searchInput').on('keyup',function () {
+
+                let search = $(this).val().toLowerCase();
+                let $rows = $('#dashboardTable tbody tr');
+
+                $rows.filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(search) > -1)
+                });
+            });
+        });
+
+        $(function () {
+            $('#closedCheckbox').change(function(){
+                closedChecked = $(this).prop('checked');
+                let row = $('#dashboardTable tbody tr');
+                if(closedChecked){
+                    row.filter(function () {
+                        $(this).show();
+                    });
+                } else {
+                    row.filter(function () {
+                        let status = $(this).find('td:nth-child(9)').text().toLowerCase();
+                        if(status === 'closed'){
+                            $(this).hide();
+                        }
+                    });
+                }
+            });
+        });
+
+        $(function () {
+            $('#myCheckbox').change(function(){
+                myChecked = $(this).prop('checked');
+                let row = $('#dashboardTable tbody tr');
+                let loggedInUser = [[${user.name}]].toLowerCase();
+                if(myChecked){
+                    row.filter(function () {
+                        let user = $(this).find('td:nth-child(2)').text().toLowerCase();
+                        if(user !== loggedInUser){
+                            $(this).hide();
+                        }
+                    });
+                } else {
+                    row.filter(function () {
+                        $(this).show();
+                    });
+                }
+            });
+        });
+
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container" >
+        <h1 class="header" style="text-align: center; margin-top: 1em; margin-bottom: 1em;" th:text="|TechService Dashboard for ${user.name}|"></h1>
+        <div class="form-group row ">
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search..." title="Search for anything"/>
+            </div>
+            <div class="custom-control custom-checkbox col">
+                <div class="col">
+                    <input class="custom-control-input" type="checkbox" id="closedCheckbox" checked>
+                    <label class="custom-control-label" for="closedCheckbox">Include Closed</label>
+                </div>
+                <div class="col">
+                    <input class="custom-control-input" type="checkbox" id="myCheckbox" th:each="role : ${user.authorities}" th:disabled="${role.authority == 'ROLE_VIEWER'}">
+                    <label class="custom-control-label" for="myCheckbox" th:each="role : ${user.authorities}" th:disabled="${role.authority == 'ROLE_VIEWER'}">My Records Only</label>
+                </div>
+            </div>
+            <button type="button" class="col btn btn-primary float-right" id="newCall" th:each="role : ${user.authorities}" th:disabled="${role.authority == 'ROLE_VIEWER'}">+ New Call</button>
+        </div>
+        <div class="table-responsive" style="overflow-y: paged-y">
+            <table class="table-sm table-sortable table-bordered" id="dashboardTable" >
+                <thead>
+                <tr style="cursor: pointer">
+                    <th width="7%" id="ticket">Ticket Number</th>
+                    <th width="10%" id="user">Entered By</th>
+                    <th width="9%" id="created">Date Created</th>
+                    <th width="10%" id="customer">Customer</th>
+                    <th width="10%" id="prodFam">Product Family</th>
+                    <th width="9%" id="prodName">Product Name</th>
+                    <th width="8%" id="erpNum">ERP Order Number</th>
+                    <th width="19%" id="prodIss">Product Issue</th>
+                    <th width="9%" id="status">Status</th>
+                    <th width="9%" id="completed">Date Completed</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="callRecord : ${callRecord}" style="cursor: pointer">
+                    <td th:text="${callRecord.id}"></td>
+                    <td th:text="${callRecord.user?.name}"></td>
+                    <td th:text="${#dates.format(callRecord.dateCreated, 'MM/dd/yyyy')}"></td>
+                    <td th:text="${callRecord.custName}"></td>
+                    <td th:text="${callRecord.product.prodFamily?.getName()}"></td>
+                    <td th:text="${callRecord.product.name}"></td>
+                    <td th:text="${callRecord.erpNum}"></td>
+                    <td th:text="${callRecord.product?.prodIssue?.getName()}"></td>
+                    <td th:text="${callRecord.status?.getName()}"></td>
+                    <td th:text="${#dates.format(callRecord.dateCompleted, 'MM/dd/yyyy')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="bottomRow" class="form-group row" style="margin-top: 1em">
+            <div class="col">
+                <button type="submit" class="btn btn-primary" id="updateCall" th:each="role : ${user.authorities}" th:text="${role.authority == 'ROLE_VIEWER'} ? 'View Call Record' : 'Update Call Record'"></button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary" id="reports">Reports</button>
+            </div>
+            <div class="col" th:each="role : ${user.authorities}" th:if="${role.authority == 'ROLE_ADMIN'}" >
+                <button type="submit" class="btn btn-danger" id="deleteCall">Delete Call Record</button>
+            </div>
+            <div class="col" th:each="role : ${user.authorities}" th:if="${role.authority == 'ROLE_ADMIN'}" >
+                <button type="button" class="btn btn-danger " id="createAccount">Create Account</button>
+            </div>
+            <div class="col">
+                <form action="/logout" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <div class="col">
+                        <button type="submit" class="btn btn-danger" >Logout</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/tableSort.js"></script>
+</body>
+</html>

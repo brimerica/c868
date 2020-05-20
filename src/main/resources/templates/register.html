@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TechService - User Creation</title>
+    <script
+            src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+            integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+            crossorigin="anonymous">
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $("#back").click(function(){
+                window.location.href = "/dashboard";
+            })
+        });
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h2 class="card-header" style="text-align: center; margin-top: 1em;">Create an Account</h2>
+        <div class="card-body">
+            <form action="" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div class="form-group row">
+                    <label for="name" class="col-12 col-sm-3 col-md-2 col-form-label">Full Name:</label>
+                    <div class="col-12 col-sm-9 col-md-10">
+                        <input type="text" class="form-control" id="name" th:field="${user.name}"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="username" class="col-12 col-sm-3 col-md-2 col-form-label">Username:</label>
+                    <div class="col-12 col-sm-9 col-md-10">
+                        <input type="text" class="form-control" id="username" th:field="${user.username}"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-12 col-sm-3 col-md-2 col-form-label">Role:</label>
+                    <div class="col-12 col-sm-9 col-md-10">
+                        <select required class="custom-select" id="authorities" th:field="${authority.authority}">
+                            <option style="display: none" value="">Choose Role...</option>
+                            <option value="ROLE_VIEWER">Viewer Only</option>
+                            <option value="ROLE_USER">Standard User</option>
+                            <option value="ROLE_ADMIN">Administrator</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="password" class="col-12 col-sm-3 col-md-2 col-form-label">Password:</label>
+                    <div class="col-12 col-sm-9 col-md-10">
+                        <input type="password" class="form-control" id="password" th:field="${user.password}"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-12 col-sm-3 col-md-2 col-form-label">Confirm Password:</label>
+                    <div class="col-12 col-sm-9 col-md-10">
+                        <input type="password" class="form-control" id="confirmPassword"/>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" id="back">Back</button>
+                <button type="submit" class="btn btn-primary float-right">Create Account</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

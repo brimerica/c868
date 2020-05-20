@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TechService - New Call Record</title>
+    <script
+            src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+            integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+            crossorigin="anonymous">
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $("#back").click(function(){
+                window.location.href = "/dashboard";
+            })
+        });
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h2 class="card-header" style="text-align: center; margin-top: 1em; margin-bottom: 1em;">New  Call Record</h2>
+        <div class="card-body">
+            <form action="/dashboard" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div class="form-group row">
+                    <label class="col-12 col-sm-3 col-md-2 col-form-label">Technician Name:</label>
+                    <div class="col-12 col-sm-9 col-md-10">
+                        <label class="col-form-label" th:text="${user.name}"></label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-12 col-sm-3 col-md-2 col-form-label">Date Created:</label>
+                    <div class="col-12 col-sm-9 col-md-10">
+                        <label class="col-form-label" th:text="${#dates.format(#dates.createNow(), 'MM/dd/yyyy')}"></label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="erpNum" class="col-12 col-sm-3 col-md-2 col-form-label">Original ERP#:</label>
+                    <div class="col-12 col-sm-9 col-md-10">
+                        <input required type="text" class="form-control" id="erpNum" th:field="${callRecord.erpNum}"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="custName" class="col-12 col-sm-3 col-md-2 col-form-label">Customer Name:</label>
+                    <div class="col-12 col-sm-9 col-md-10">
+                        <select required class="custom-select" id="custName" th:field="${callRecord.custName}">
+                            <option style="display: none" value="">Customer Name...</option>
+                            <option value="ACME Corporation">ACME Corporation</option>
+                            <option value="Aperture Laboratories">Aperture Laboratories</option>
+                            <option value="Clamp Corporation">Clamp Corporation</option>
+                            <option value="Stark Industries">Stark Industries</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="productFamily" class="col-12 col-sm-3 col-md-2 col-form-label">Product Family:</label>
+                    <div class="dropdown col-12 col-sm-9 col-md-10">
+                        <select required class="custom-select" id="productFamily" th:field="${{product.prodFamily}}">
+                            <option style="display: none" value="">Choose Family...</option>
+                            <option th:each="productFamily : ${T(com.example.c868.model.ProductFamily).values()}" th:value="${{productFamily}}" th:text="${productFamily.getName()}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-12 col-sm-3 col-md-2 col-form-label">Product:</label>
+                    <div class="dropdown col-12 col-sm-9 col-md-10">
+                        <select required class="custom-select" id="product" th:field="${product.name}">
+                            <option style="display: none" value="">Choose Product...</option>
+                            <option value="Plumbis">Plumbis</option>
+                            <option value="Dingle Bop">Dingle Bop</option>
+                            <option value="Shleem">Shleem</option>
+                            <option value="Grumbo">Grumbo</option>
+                            <option value="Fleeb">Fleeb</option>
+                            <option value="Shlomy">Shlomy</option>
+                            <option value="Hizard">Hizard</option>
+                            <option value="Blamph">Blamph</option>
+                            <option value="Chumble">Chumble</option>
+                            <option value="Ploobis">Ploobis</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-12 col-sm-3 col-md-2 col-form-label">Product Issue:</label>
+                    <div class="dropdown col-12 col-sm-9 col-md-10">
+                        <select required class="custom-select" id="prodIssue" th:field="${{product.prodIssue}}">
+                            <option style="display: none" value="">Choose Issue...</option>
+                            <option th:each="productIssue : ${T(com.example.c868.model.ProductIssue).values()}" th:value="${{productIssue}}" th:text="${productIssue.getName()}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-12 col-sm-3 col-md-2 col-form-label">Status:</label>
+                    <div class="dropdown col-12 col-sm-9 col-md-10">
+                        <select required class="custom-select" id="status" th:field="${{callRecord.status}}">
+                            <option style="display: none" value="">Choose Status...</option>
+                            <option th:each="callStatus : ${T(com.example.c868.model.CallStatus).values()}" th:value="${{callStatus}}" th:text="${callStatus.getName()}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="comment" class="col-12 col-sm-3 col-md-2 col-form-label">Comment:</label>
+                    <div class="col-12 col-sm-9 col-md-10">
+                        <textarea required class="form-control" rows="4" id="comment" th:field="${comment.text}"></textarea>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" id="back">Back</button>
+                <button type="submit" class="btn btn-primary float-right">Save Record</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

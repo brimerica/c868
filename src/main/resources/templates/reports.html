@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TechService - Reports</title>
+    <style>
+        div{
+            text-align: center;
+        }
+
+        #rowOfTables{
+            align-items: center;
+        }
+        table{
+            margin: auto;
+        }
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+            integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+            crossorigin="anonymous">
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $("#back").click(function(){
+                window.location.href = "/dashboard";
+            })
+        });
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1 class="header" style="text-align: center; margin-top: 1em; margin-bottom: 1em;" th:text="|TechService Reports as of ${#dates.format(#dates.createNow(), 'MM/dd/yyyy')}|"></h1>
+    <hr style="margin-bottom: .25em">
+    <div class="form-group row" style="margin-bottom: .25em">
+        <div class="col">
+            <label class="col-form-label" style="font-size: 20px">Total Calls:</label>
+        </div>
+        <div class="col">
+            <label class="col-form-label" style="font-size: 20px">Total Closed Calls:</label>
+        </div>
+        <div class="col">
+            <label class="col-form-label" style="font-size: 20px">Total Urgent Calls:</label>
+        </div>
+        <div class="col">
+            <label class="col-form-label" style="font-size: 20px">Total Calls in Progress:</label>
+        </div>
+        <div class="col">
+            <label class="col-form-label" style="font-size: 20px">Total Calls on Hold:</label>
+        </div>
+    </div>
+    <div class="form-group row" style="margin-bottom: .25em">
+        <div class="col">
+            <label class="col-form-label" style="font-size: 40px" th:text="${totalCalls}"></label>
+        </div>
+        <div class="col">
+            <label class="col-form-label" style="font-size: 40px" th:text="${closedCalls}"></label>
+        </div>
+        <div class="col">
+            <label class="col-form-label" style="font-size: 40px" th:text="${urgentCalls}"></label>
+        </div>
+        <div class="col">
+            <label class="col-form-label" style="font-size: 40px" th:text="${inProgressCalls}"></label>
+        </div>
+        <div class="col">
+            <label class="col-form-label" style="font-size: 40px" th:text="${onHoldCalls}"></label>
+        </div>
+    </div>
+    <hr style="margin-top: .25em">
+    <div class="form-group row">
+        <div class="col table-responsive" style="overflow-y: paged-y" id="rowOfTables">
+            <table class="table-sm table-bordered" id="productTable">
+                <thead>
+                    <tr style="cursor: pointer">
+                        <th>Product Name</th>
+                        <th>Total Records</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="productCount : ${productCount}" style="cursor: pointer" class="datarow">
+                        <td th:text="${productCount[0]}"></td>
+                        <td th:text="${productCount[1]}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col table-responsive" style="overflow-y: paged-y">
+            <table class="table-sm table-bordered" id="customerTable">
+                <thead>
+                <tr style="cursor: pointer">
+                    <th>Customer Name</th>
+                    <th>Total Records</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr style="cursor: pointer">
+                    <td>Aperture Laboratories</td>
+                    <td th:text="${apertureCalls}"></td>
+                </tr>
+                <tr style="cursor: pointer">
+                    <td>Clamp Corporation</td>
+                    <td th:text="${clampCalls}">0</td>
+                </tr>
+                <tr style="cursor: pointer">
+                    <td>Stark Industries</td>
+                    <td th:text="${starkCalls}">0</td>
+                </tr>
+                <tr style="cursor: pointer">
+                    <td>ACME Corporation</td>
+                    <td th:text="${acmeCalls}">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-secondary" id="back">Back</button>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

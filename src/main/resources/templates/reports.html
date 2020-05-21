@@ -70,7 +70,7 @@
     <hr style="margin-top: .25em">
     <div class="form-group row">
         <div class="col table-responsive" style="overflow-y: paged-y" id="rowOfTables">
-            <table class="table-sm table-bordered" id="productTable">
+            <table class="table-sm table-sortable table-bordered" id="productTable">
                 <thead>
                     <tr style="cursor: pointer">
                         <th>Product Name</th>
@@ -78,15 +78,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="productCount : ${productCount}" style="cursor: pointer" class="datarow">
-                        <td th:text="${productCount[0]}"></td>
-                        <td th:text="${productCount[1]}"></td>
+                    <tr th:each="productList : ${productList}" style="cursor: pointer" class="datarow">
+                        <td th:text="${productList.name}"></td>
+                        <td th:text="${productList.total}"></td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="col table-responsive" style="overflow-y: paged-y">
-            <table class="table-sm table-bordered" id="customerTable">
+            <table class="table-sm table-sortable table-bordered" id="customerTable">
                 <thead>
                 <tr style="cursor: pointer">
                     <th>Customer Name</th>
@@ -119,8 +119,7 @@
             <button type="button" class="btn btn-secondary" id="back">Back</button>
         </div>
     </div>
-
 </div>
-
+<script type="text/javascript" src="/tableSort.js"></script>
 </body>
 </html>

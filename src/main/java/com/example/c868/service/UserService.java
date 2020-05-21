@@ -8,9 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 @Service
 public class UserService {
 
@@ -32,11 +29,11 @@ public class UserService {
                 break;
             case "ROLE_ADMIN":
                 authority.setAuthority("ROLE_ADMIN");
-                authority.setId(6L);
+                authority.setId(2L);
                 break;
             default:
                 authority.setAuthority("ROLE_VIEWER");
-                authority.setId(7L);
+                authority.setId(3L);
                 break;
         }
 

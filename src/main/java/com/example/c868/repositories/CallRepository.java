@@ -18,7 +18,9 @@ public interface CallRepository extends JpaRepository<CallRecord, Long> {
 
     Long countCallRecordsByStatus(CallStatus callStatus);
 
-    @Query("select COUNT(cr), p.name from CallRecord cr join Product p on cr.id = p.id GROUP BY p.name")
-    List<Object> countCallRecordsByProductName();
+    Long countCallRecordsByProductName(String product);
+
+/*    @Query("select p.name, COUNT(*) from call_record cr join product p on cr.product_id = p.id GROUP BY p.name");
+    List<CallRecord> countCallRecordsByProductName();*/
 
 }

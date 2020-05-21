@@ -61,8 +61,8 @@ public class CallRecordService {
         return callRepository.count();
     }
 
-    public List<Object> getCountCallRecordsByProductName(){
-        return callRepository.countCallRecordsByProductName();
+    public Long getCountCallRecordsByProductName(String product){
+        return callRepository.countCallRecordsByProductName(product);
     }
 
 }

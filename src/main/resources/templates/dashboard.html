@@ -40,9 +40,9 @@
     <script type="text/javascript" th:inline="javascript">
 
         let closedChecked = true;
-        let myChecked;
+        let myChecked = false;
         let callRecordId;
-        let search;
+        let search = "";
 
         $(function() {
             $("#createAccount").click(function(){
@@ -111,6 +111,8 @@
         });
 
         function filterCheckboxes() {
+            console.log("Include Closed: " + closedChecked);
+            console.log("My Records : " + myChecked);
 
             let row = $('#dashboardTable tbody tr');
             let loggedInUser = [[${user.name}]].toLowerCase();
@@ -140,9 +142,9 @@
                 });
             } else if(!closedChecked && myChecked){
                 row.filter(function () {
-                    // let status = $(this).find('td:nth-child(9)').text().toLowerCase();
+                    let status = $(this).find('td:nth-child(9)').text().toLowerCase();
                     let user = $(this).find('td:nth-child(2)').text().toLowerCase();
-                    if(user === loggedInUser){
+                    if(user === loggedInUser && status !=='closed'){
                         $(this).show();
                         $(this).filter(function () {
                             $(this).toggle($(this).text().toLowerCase().indexOf(search) > -1);

@@ -43,7 +43,7 @@ class CallRecordServiceTest {
     @Test
     void verifyCallRecordStatusIsClosed() {
 
-        int expected = 5;
+        int expected = 6;
 
         Long callCount = callRepository.countCallRecordsByStatus(CallStatus.CLOSED);
         assertEquals(expected, callCount, "Total call record count with the status of CLOSED");
